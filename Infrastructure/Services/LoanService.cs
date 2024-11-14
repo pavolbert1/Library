@@ -14,10 +14,10 @@ namespace LibraryAPI.Infrastructure.Services
         public async Task<Loan?> CreateLoan(int bookId, int userId)
         {
             var book = await _bookRepository.GetBookDetails(bookId) ??
-                throw new NotFoundException("Book record is not found.");
+                throw new NotFoundException("Book record not found.");
 
             var user = await _userRepository.GetUserDetails(userId) ??
-                throw new NotFoundException("User record is not found.");
+                throw new NotFoundException("User record not found.");
 
             if (book.IsLoaned)
             {
@@ -34,7 +34,7 @@ namespace LibraryAPI.Infrastructure.Services
                 BookId = bookId,
                 UserId = userId,
                 LoanDate = DateTime.Now,
-                PlannedReturnDate = DateTime.Now.AddDays(1),
+                PlannedReturnDate = DateTime.Now.AddDays(30),
                 IsReturned = false
             };
             await _loanRepository.AddLoan(loan);

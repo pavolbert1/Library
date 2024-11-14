@@ -8,6 +8,7 @@ namespace LibraryAPI.Core.Models
         public int Id { get; set; }
         public required string Name { get; set; }
         public required string Surname { get; set; }
+        [EmailAddress(ErrorMessage = "The email address is not valid")]
         public required string Email { get; set; }
     }
 }

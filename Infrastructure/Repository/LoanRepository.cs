@@ -1,4 +1,5 @@
-﻿using LibraryAPI.Core.IRepository;
+﻿using LibraryAPI.Core.Exceptions;
+using LibraryAPI.Core.IRepository;
 using LibraryAPI.Core.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -27,12 +28,10 @@ namespace LibraryAPI.Infrastructure.Repository
 
         public async Task Delete(int id)
         {
-            var loan = await _context.Loans.FindAsync(id);
-            if (loan != null)
-            {
-                _context.Loans.Remove(loan);
-                await _context.SaveChangesAsync();
-            }
+            var loan = await _context.Loans.FindAsync(id) ?? throw new NotFoundException("Loan record not found.");
+
+            _context.Loans.Remove(loan);
+            await _context.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<Loan?>> GetLoansForReminder(DateTime reminderDate) => 

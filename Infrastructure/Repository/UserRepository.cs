@@ -1,4 +1,5 @@
-﻿using LibraryAPI.Core.IRepository;
+﻿using LibraryAPI.Core.Exceptions;
+using LibraryAPI.Core.IRepository;
 using LibraryAPI.Core.Models;
 
 namespace LibraryAPI.Infrastructure.Repository
@@ -25,12 +26,10 @@ namespace LibraryAPI.Infrastructure.Repository
 
         public async Task DeleteUser(int id)
         {
-            var user = await _context.Users.FindAsync(id);
-            if (user != null)
-            {
-                _context.Users.Remove(user);
-                await _context.SaveChangesAsync();
-            }
+            var user = await _context.Users.FindAsync(id) ?? throw new NotFoundException("User record not found.");
+
+            _context.Users.Remove(user);
+            await _context.SaveChangesAsync();
         }
     }
 }

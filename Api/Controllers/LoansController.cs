@@ -18,8 +18,7 @@ namespace LibraryAPI.Api.Controllers
                 throw new BadRequestException("Input parameters are not valid.");
             }
 
-            var loan = await _loanService.CreateLoan(bookId, userId) ??
-                throw new Exception("Loan was not created.");
+            var loan = await _loanService.CreateLoan(bookId, userId) ?? throw new Exception("Loan was not created.");
 
             return CreatedAtAction(nameof(GetLoan), new { id = loan.Id }, loan);
         }

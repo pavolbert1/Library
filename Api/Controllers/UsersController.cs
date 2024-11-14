@@ -14,11 +14,7 @@ namespace LibraryAPI.Api.Controllers
         [HttpGet]
         public IActionResult GetAllUsers()
         {
-            var users = _userService.GetAllUsers();
-            if (users == null)
-            {
-                return NotFound();
-            }
+            var users = _userService.GetAllUsers() ?? throw new NotFoundException("User records not found."); ;
 
             return Ok(users);
         }
@@ -31,11 +27,7 @@ namespace LibraryAPI.Api.Controllers
                 throw new BadRequestException("Input parameter is not valid.");
             }
 
-            var user = await _userService.GetUserDetails(id);
-            if (user == null)
-            {
-                return NotFound();
-            }
+            var user = await _userService.GetUserDetails(id) ?? throw new NotFoundException("User record not found.");
 
             return Ok(user);
         }
@@ -61,7 +53,9 @@ namespace LibraryAPI.Api.Controllers
             }
 
             if (id != user.Id)
-                return BadRequest();
+            {
+                throw new BadRequestException("ID of user is different in body and parameter.");
+            }
 
             await _userService.UpdateUser(user);
             return Ok();
